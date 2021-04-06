@@ -1,0 +1,87 @@
+
+
+
+.pageWrapper{
+	display:flex;
+height:2000px;
+width:100%;
+flex-direction: column;
+align-items:center;
+background-color:#EEA47FFF;
+	
+}
+
+
+header{
+	width:100%;
+	height:10%;
+}
+.mainBox{
+	display:flex;
+	width:100%;
+	height:18%;
+	border:solid black;
+	margin-left:10px;
+	margin-right:10px;
+	
+	
+}
+
+.lastSearchedBox{
+	 background-image: url("https://www.metoffice.gov.uk/public/tiles/light-theme-base/5/14/9@2x.jpg");
+
+	height:100%;
+	width:40%;
+	
+	
+	
+	
+}
+h2{
+	position:relative;
+	left:30%;
+	color:white;
+}
+
+.previousSearchList{
+	position:relative;
+		left:25%;
+		list-style: none;
+		font-size:30px;
+		color:white;
+		
+}
+
+
+.weatherBox{
+	
+	
+	height:100%;
+	width:60%;
+	
+	
+	 background-size: cover;
+	 background-repeat: no-repeat;
+	
+}
+
+.weatherImage{
+	width:100%;
+	height:100%;
+}
+
+
+.dataList{
+	color:white;
+	position:relative;
+	top:-30%;
+	list-style: none;
+	font-size:30px;
+}
+.tempTextCelsius{
+	position:relative;
+	top:-55%;
+	left:70%;
+	color:#2E8B57;
+	font-size:70px;
+}
