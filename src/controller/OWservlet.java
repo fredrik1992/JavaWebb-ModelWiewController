@@ -18,22 +18,24 @@ import model.weatherBean;
 @WebServlet({"/OWservlet"})
 public class OWservlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-  
+    private weatherBean wBean;
     public OWservlet() {
+    	
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String cityStr = request.getParameter("city");
         String countryStr = request.getParameter("country");
         
+        wBean = new weatherBean(cityStr, countryStr);
         
         
         
-        
-       weatherBean wBean = new weatherBean(cityStr, countryStr);
+      
         
         
         GettheWeather.getWeather(wBean);
+       
       //spara datan till cookies ?
         request.setAttribute("wBean", wBean);
         
@@ -50,43 +52,29 @@ public class OWservlet extends HttpServlet {
 			
 			Cookie[] cookies = request.getCookies();
 			if (request.getParameter("cookieChoice").equals("yes")) {
+				Cookie ckAllowCookie = new Cookie("allowCookies", "allow");
+				ckAllowCookie.setMaxAge(20);
+				response.addCookie(ckAllowCookie);
 				
-				if (cookies != null) {
-
-					for (Cookie cookie : cookies) {
-						if (cookie.getName().equals("cityName")) {
-							request.setAttribute("savedCity", cookie.getValue());
-
-							// value can be retrieved using #cookie.getValue()
-						}
-						if (cookie.getName().equals("clouds")) {
-
-							// let tempvalueArray = tempValue.split('=');
-							// let text = document.createTextNode(tempvalueArray[1].replace("-"," "))
-
-							// console.log(tempvalueArray[1].replace("-"," "));
-							String cleanedUpValue = cookie.getValue().replaceAll("-", " ");
-							request.setAttribute("savedClouds", cleanedUpValue);
-
-							// value can be retrieved using #cookie.getValue()
-						}
-						if (cookie.getName().equals("temperature")) {
-
-							String cleanedUpValue = cookie.getValue().replaceAll("-", ",");
-							request.setAttribute("savedTemp", cleanedUpValue);
-
-							// value can be retrieved using #cookie.getValue()
-						}
-					}
+					//String cleanedUpValue = cookie.getValue().replaceAll("-", ",");
+					
+					
 				}
-			}else {
+			else {
 					
 				for(int i =0; i<cookies.length;i++) {
+					if(cookies[i].getName().equals("JSESSIONID")){
+						
+					}else{
+					System.out.print(cookies[i].getName());
+					System.out.print("changing the max age");
+					Cookie ckStreet = new Cookie(cookies[i].getName(),"removing" );
+					ckStreet.setMaxAge(0);
+					response.addCookie(ckStreet);
 					
-					cookies[i].setMaxAge(0);
 					
 				}
-			}
+			}}
 			
 			
 		}catch (Exception e) {
@@ -99,23 +87,32 @@ public class OWservlet extends HttpServlet {
 			
 			if (request.getParameter("cookieChoice").equals("yes") ) {
 				
-				String street = wBean.getCityStr();
+				
+				List<Cookie> allCookies = new ArrayList<Cookie>(6);
+				Cookie[] cookies = request.getCookies();
+				int foundMatchingCookie = 0;
+				for ( int i = 0;i<cookies.length;i++) {
+					System.out.print("adding cookie");
+					allCookies.add(cookies[i]);
+					
+				}
+				
+				for(int i = 0;i < allCookies.size();i++){
+					
+					if(allCookies.get(i).getName().equals(cityStr)) {
+						foundMatchingCookie++;
+					}
+				}
+				
+				if(foundMatchingCookie == 0 && allCookies.size()<6){
+					createCookie(response,request);
 
-				Cookie ckStreet = new Cookie("cityName", street);
-				ckStreet.setMaxAge(800);
-				response.addCookie(ckStreet);
-
-				String clouds = wBean.getCloudsStr();
-
-				Cookie ckClouds = new Cookie("clouds", clouds);
-				ckStreet.setMaxAge(800);
-				response.addCookie(ckClouds);
-			
-
-				String temp = wBean.getTemperatureCelsius();
-				Cookie ckTemp = new Cookie("temperature", temp);
-				ckStreet.setMaxAge(800);
-				response.addCookie(ckTemp);
+				}
+				
+				
+				
+				
+				
 
 			} else {
 				// do not create new cookies
@@ -127,6 +124,20 @@ public class OWservlet extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("showWeather.jsp");
         rd.forward(request, response);
     }
+    public  void createCookie( HttpServletResponse response,HttpServletRequest request ){
+    	
+    	
+    	String street = wBean.getCityStr();
+    	String cloudsData = wBean.getCloudsStr();
+    	String tempData = wBean.getTemperatureCelsius();
+    	
+    	String allDataForCookie = street + "#" + cloudsData + "#" + tempData;
+		Cookie ckStreet = new Cookie(street,allDataForCookie );
+		ckStreet.setMaxAge(200);
+		response.addCookie(ckStreet);
+		 
+		
+	}
     
   
     

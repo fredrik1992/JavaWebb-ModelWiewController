@@ -29,13 +29,39 @@ header{
 
 .lastSearchedBox{
 	 background-image: url("https://www.metoffice.gov.uk/public/tiles/light-theme-base/5/14/9@2x.jpg");
-
+	  display: grid;
+  grid-template-areas: 'Area1 Area2'
+                      ' Area3 Area4';
 	height:100%;
 	width:40%;
 	
 	
 	
 	
+}
+
+.window0{
+	grid-area:Area1;
+	
+	
+}
+.window1{
+	grid-area:Area2;
+	
+	
+}
+.window2{
+	grid-area:Area3;
+	
+
+}
+.window3{
+	grid-area:Area4;
+	
+
+}
+.oldDataLists{
+	list-style: none;
 }
 h2{
 	position:relative;
@@ -85,3 +111,4 @@ h2{
 	color:#2E8B57;
 	font-size:70px;
 }
+

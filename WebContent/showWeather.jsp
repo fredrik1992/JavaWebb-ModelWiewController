@@ -24,27 +24,34 @@
 		
 		
 			<%
-		try {
-			if(request.getAttribute("savedCity") != null){
+			Cookie[] cookies = request.getCookies();
+	
+				System.out.print(cookies.length);
+				int numberToAddToClass = 0;
+				for (int i  = 0 ;i< cookies.length; i++){
+					
+					if(cookies[i].getName().equals("allowCookies") ||  cookies[i].getName().equals("JSESSIONID")){
+						
+					}else{
+						System.out.print(cookies[i].getName());
+						String allValues = cookies[i].getValue();
+						String city,cloud,temp;
+						String[] valuesSplit = allValues.split("#"); 
+						
+						out.print("<div class = \"window"+ numberToAddToClass + "\"> <ul class = \"oldDataLists\"> <li>City:" + valuesSplit[0] + "<li>Cloud:" + valuesSplit[1] + "<li>Temp:" + valuesSplit[2] + "</div>" );
+						numberToAddToClass ++;
+						
+						
+					}
+					
+				}
 				
-			out.print("<h2>Last searched city</h2>");
-
-			String city = String.valueOf(request.getAttribute("savedCity"));
-			String clouds = String.valueOf(request.getAttribute("savedClouds"));
-			String temp = String.valueOf(request.getAttribute("savedTemp"));
-
-			String ulListToAdd = ("<ul class = \"previousSearchList\"> <li> City:" + city + "</li> <li> Clouds:"
-					+ clouds + "</li> <li> Temp:" + temp + "C");
+				
+				
+				
 			
 
-			out.print(ulListToAdd);
-			}else{
-				out.print("<h2>no data saved</h2>");
-			}
-
-				} catch (Exception e) {
-
-				}
+				
 		%>
 		
 		
@@ -92,8 +99,9 @@
 			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 			crossorigin="anonymous"></script>
 		
-
+	<a href="Index.jsp">Go back</a>
 	</div>
+
 	
 	<script src="showWeather.js"></script>
 
